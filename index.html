@@ -3,66 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1 Japan GP 2026</title>
+    <title>Racing Hub Multi</title>
     <style>
-        body { background: #0b0b0b; color: white; font-family: -apple-system, sans-serif; padding: 20px; margin: 0; }
-        .header { border-bottom: 3px solid #e10600; margin-bottom: 20px; padding-bottom: 10px; }
-        .event-card { background: #1a1a1a; border-radius: 12px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #e10600; }
-        .weather { background: #252525; padding: 10px; border-radius: 8px; color: #00d2ff; font-weight: bold; }
-        .chance-list { list-style: none; padding: 0; }
-        .chance-item { background: #222; margin: 5px 0; padding: 10px; border-radius: 5px; display: flex; justify-content: space-between; }
-        .win-chance { color: #00ff00; font-weight: bold; }
-        .btn { background: #e10600; color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px; }
+        /* ТВОЙ СТИЛЬ (Можешь потом менять как хочешь) */
+        body { background: #0b0b0b; color: white; font-family: sans-serif; margin: 0; padding: 0; }
+        
+        /* Меню вкладок сверху */
+        .tab-menu { display: flex; background: #1a1a1a; position: sticky; top: 0; z-index: 100; }
+        .tab-btn { flex: 1; padding: 15px; border: none; background: none; color: #888; font-weight: bold; cursor: pointer; border-bottom: 2px solid transparent; }
+        .tab-btn.active { color: #e10600; border-bottom: 2px solid #e10600; }
+
+        .content { padding: 20px; }
+        .tab-content { display: none; } /* По умолчанию прячем всё */
+        .tab-content.active { display: block; } /* Показываем только активную */
+
+        /* Карточки для красоты */
+        .card { background: #1a1a1a; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #444; }
+        .f1-border { border-left-color: #e10600; }
+        .wec-border { border-left-color: #00ff00; }
+        .gt-border { border-left-color: #ffaa00; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>GP JAPAN 🇯🇵 2026</h1>
-        <p>Suzuka International Circuit</p>
+    <div class="tab-menu">
+        <button class="tab-btn active" onclick="openTab(event, 'f1')">F1</button>
+        <button class="tab-btn" onclick="openTab(event, 'wec')">WEC</button>
+        <button class="tab-btn" onclick="openTab(event, 'gt')">GT / Nurb</button>
     </div>
 
-    <div class="event-card">
-        <h3>📅 Расписание (Baku Time):</h3>
-        <p>🏎️ <strong>Квалификация:</strong> 4 апреля | 10:00</p>
-        <p>🏁 <strong>Гонка:</strong> 5 апреля | 09:00</p>
-    </div>
+    <div class="content">
+        <div id="f1" class="tab-content active">
+            <h1>Formula 1</h1>
+            <div class="card f1-border">
+                <h3>GP Japan 🇯🇵</h3>
+                <p>Квалификация: 4 апреля</p>
+                <p>Гонка: 5 апреля</p>
+            </div>
+        </div>
 
-    <div class="event-card">
-        <h3>☁️ Прогноз погоды:</h3>
-        <div class="weather">Вероятность дождя: 65% (Возможен хаос)</div>
-        <p style="font-size: 0.9rem; color: #aaa; margin-top: 5px;">Температура трассы: ~18°C</p>
-    </div>
+        <div id="wec" class="tab-content">
+            <h1>WEC / Le Mans</h1>
+            <div class="card wec-border">
+                <h3>6 Hours of Spa 🇧🇪</h3>
+                <p>Дата: 10 мая</p>
+                <p>Классы: Hypercar, LMGT3</p>
+            </div>
+        </div>
 
-    <h3>📊 Шансы на победу:</h3>
-    <ul class="chance-list">
-        <li class="chance-item"><span>M. Verstappen</span> <span class="win-chance">45%</span></li>
-        <li class="chance-item"><span>L. Norris</span> <span class="win-chance">25%</span></li>
-        <li class="chance-item"><span>C. Leclerc</span> <span class="win-chance">15%</span></li>
-        <li class="chance-item"><span>Другие</span> <span class="win-chance">15%</span></li>
-    </ul>
-
-    <hr style="border: 0.5px solid #333; margin: 20px 0;">
-    
-    <div id="api-data">
-        <button class="btn" onclick="fetchLastResults()">УЗНАТЬ ИТОГИ ПРОШЛОЙ ГОНКИ</button>
-    </div>
-
-    <script>
-        async function fetchLastResults() {
-            const container = document.getElementById('api-data');
-            container.innerHTML = "Загрузка данных...";
-            try {
-                const res = await fetch('https://ergast.com/api/f1/current/last/results.json');
-                const data = await res.json();
-                const race = data.MRData.RaceTable.Races[0];
-                let html = `<h4>Победители ${race.raceName}:</h4>`;
-                race.Results.slice(0, 3).forEach(r => {
-                    html += `<div style="margin-bottom:5px;">${r.position}. ${r.Driver.familyName} (${r.Constructor.name})</div>`;
-                });
-                container.innerHTML = html;
-            } catch (e) { container.innerHTML = "Ошибка сети"; }
-        }
-    </script>
-</body>
-</html>
+        <div id="gt" class="tab-content">
+            <h1>GT World Challenge</h1>
+            <div class="card gt-border">
+                <h3>Nürburgring 24h 🇩🇪</h3>
+                <p>Легендарная петля ждет.</p>
