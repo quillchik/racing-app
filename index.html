@@ -1,268 +1,270 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>F1 Current</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<style>
-body {
-    background: #0b0b0b;
-    color: #ffffff;
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-}
-.tabs {
-    display: flex;
-    border-bottom: 2px solid #333;
-    background: #0b0b0b;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-.tab {
-    flex: 1;
-    text-align: center;
-    padding: 15px 0;
-    font-weight: 800;
-    text-transform: uppercase;
-    color: #555;
-    font-size: 16px;
-}
-.tab.active {
-    color: #e10600;
-    border-bottom: 3px solid #e10600;
-    margin-bottom: -2px;
-}
-.container {
-    padding: 20px;
-}
-.gp-title {
-    font-size: 32px;
-    font-weight: 800;
-    margin: 10px 0 20px 0;
-}
-.timer-container {
-    text-align: left;
-    margin-bottom: 30px;
-    position: relative;
-}
-.timer {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 64px;
-    font-weight: 400;
-    line-height: 1;
-    margin: 0;
-    letter-spacing: -2px;
-}
-.baku-time {
-    position: absolute;
-    right: 0;
-    bottom: -20px;
-    font-size: 14px;
-    color: #555;
-    font-weight: 800;
-    text-transform: uppercase;
-}
-.date-text {
-    font-size: 24px;
-    font-family: 'Share Tech Mono', monospace;
-    margin-top: 5px;
-}
-.divider {
-    height: 3px;
-    background: #e10600;
-    margin: 30px 0;
-    width: 100%;
-}
-.card {
-    background: #161616;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-left: 5px solid #e10600;
-}
-.card-title {
-    font-weight: 800;
-    font-size: 18px;
-    margin: 0 0 15px 0;
-}
-.schedule-item {
-    font-size: 20px;
-    font-weight: 800;
-    color: #888;
-    margin: 10px 0;
-}
-.schedule-item span {
-    color: #fff;
-}
-.weather-box {
-    background: #222;
-    border-radius: 8px;
-    padding: 15px;
-    font-size: 18px;
-    font-weight: 800;
-    margin-bottom: 10px;
-}
-.weather-sub {
-    font-size: 12px;
-    color: #888;
-}
-.driver-row {
-    background: #161616;
-    border-radius: 8px;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    font-weight: 800;
-}
-.driver-row:last-child {
-    background: #222;
-    color: #888;
-}
-.percent {
-    color: #00ff00;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>F1 Hub Baku</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #0b0b0b;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+
+        /* Навигация */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #333;
+            background: #0b0b0b;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px 0;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #555;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .tab.active {
+            color: #e10600;
+            border-bottom: 3px solid #e10600;
+            margin-bottom: -2px;
+        }
+
+        /* Контейнеры страниц */
+        .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
+        .page.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Стили страницы CURRENT (Твой макет) */
+        .gp-title { font-size: 32px; font-weight: 800; margin: 10px 0 20px 0; }
+        
+        .timer-container { position: relative; margin-bottom: 30px; }
+        .timer { 
+            font-family: 'Share Tech Mono', monospace; 
+            font-size: 64px; 
+            font-weight: 400; 
+            line-height: 1; 
+            letter-spacing: -2px; 
+        }
+        .baku-time { 
+            position: absolute; 
+            right: 0; 
+            bottom: -20px; 
+            font-size: 14px; 
+            color: #555; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+        }
+        .date-text { 
+            font-size: 24px; 
+            font-family: 'Share Tech Mono', monospace; 
+            margin-top: 5px; 
+        }
+
+        .divider { height: 3px; background: #e10600; margin: 30px 0; width: 100%; }
+
+        .card { 
+            background: #161616; 
+            border-radius: 16px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            border-left: 5px solid #e10600; 
+        }
+        .card-title { font-weight: 800; font-size: 18px; margin: 0 0 15px 0; }
+        
+        .schedule-item { font-size: 20px; font-weight: 800; color: #888; margin: 10px 0; }
+        .schedule-item span { color: #fff; }
+
+        .driver-row { 
+            background: #161616; 
+            border-radius: 8px; 
+            padding: 15px; 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 10px; 
+            font-weight: 800; 
+        }
+        .percent { color: #00ff00; }
+
+        /* Стили страницы EXTRA */
+        .section-title { color: #e10600; font-weight: 800; margin: 25px 0 15px 5px; text-transform: uppercase; letter-spacing: 1px; font-size: 14px; }
+        
+        .list-item { 
+            background: #161616; 
+            margin-bottom: 10px; 
+            padding: 18px; 
+            border-radius: 12px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            border-right: 3px solid transparent;
+            transition: 0.2s;
+        }
+        .list-item:active { background: #222; border-right-color: #e10600; }
+        
+        .gp-info-mini { display: flex; flex-direction: column; }
+        .gp-name-mini { font-weight: 800; font-size: 16px; margin-bottom: 4px; }
+        .gp-date-mini { font-size: 12px; color: #666; font-weight: 700; }
+        .gp-status { font-weight: 800; font-size: 11px; padding: 4px 8px; border-radius: 4px; background: #222; color: #e10600; }
+        .gp-status.past { color: #555; }
+    </style>
 </head>
 <body>
 
-<div class="tabs">
-    <div class="tab active">Current</div>
-    <div class="tab">Extra</div>
-</div>
-
-<div class="container">
-    <div class="gp-title" id="gp-name">GP Загрузка...</div>
-    
-    <div class="timer-container">
-        <div class="timer" id="countdown">00.00.00</div>
-        <div class="baku-time">BAKU TIME</div>
-        <div class="date-text" id="race-date">dd.mm</div>
+    <div class="tabs">
+        <div id="tab-current" class="tab active" onclick="switchPage('current')">Current</div>
+        <div id="tab-extra" class="tab" onclick="switchPage('extra')">Extra</div>
     </div>
 
-    <div class="divider"></div>
-
-    <div class="card">
-        <div class="card-title">📅 Расписание Квалификаций</div>
-        <div class="schedule-item">Q1: <span id="q1-time">--.-- | --:--</span></div>
-        <div class="schedule-item">Q2: <span id="q2-time">--.-- | --:--</span></div>
-        <div class="schedule-item">Q3: <span id="q3-time">--.-- | --:--</span></div>
-    </div>
-
-    <div class="card">
-        <div class="card-title">☁️ Прогноз Погоды:</div>
-        <div class="weather-box" id="weather-info">WeatherInfo : --</div>
-        <div class="weather-sub" id="track-temp">Температура трассы: --°C</div>
-    </div>
-
-    <div class="card-title" style="margin-left:5px;">📊 Шансы на победу:</div>
-    <div id="chances-container">
+    <div id="page-current" class="page active">
+        <div class="gp-title" id="main-gp-name">GP LOADING...</div>
+        
+        <div class="timer-container">
+            <div class="timer" id="countdown">00.00.00</div>
+            <div class="baku-time">BAKU TIME</div>
+            <div class="date-text" id="main-race-date">--.--</div>
         </div>
-</div>
 
-<script>
-async function initApp() {
-    try {
-        const f1Res = await fetch('https://api.jolpi.ca/ergast/f1/current/next.json');
-        const f1Data = await f1Res.json();
-        const race = f1Data.MRData.RaceTable.Races[0];
-        
-        let flag = '🏁';
-        if(race.Circuit.Location.country === 'Japan') flag = '🇯🇵';
-        if(race.Circuit.Location.country === 'Azerbaijan') flag = '🇦🇿';
-        if(race.Circuit.Location.country === 'USA') flag = '🇺🇸';
-        
-        document.getElementById('gp-name').innerHTML = `GP ${race.Circuit.Location.country} ${flag}`;
-        
-        const raceDateStr = `${race.date}T${race.time || '15:00:00Z'}`;
-        const raceDateObj = new Date(raceDateStr);
-        
-        const formatZero = (num) => String(num).padStart(2, '0');
-        document.getElementById('race-date').innerText = `${formatZero(raceDateObj.getDate())}.${formatZero(raceDateObj.getMonth() + 1)}`;
-        
-        setInterval(() => {
-            const now = new Date().getTime();
-            const distance = raceDateObj.getTime() - now;
-            if (distance < 0) {
-                document.getElementById('countdown').innerText = "00.00.00";
-                return;
-            }
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            const totalHours = (days * 24) + hours;
-            document.getElementById('countdown').innerText = `${formatZero(totalHours)}.${formatZero(minutes)}.${formatZero(seconds)}`;
-        }, 1000);
+        <div class="divider"></div>
 
-        if (race.Qualifying) {
-            const qDateStr = `${race.Qualifying.date}T${race.Qualifying.time || '15:00:00Z'}`;
-            const qDate = new Date(qDateStr);
+        <div class="card">
+            <div class="card-title">📅 Расписание Квалификаций</div>
+            <div class="schedule-item">Q1: <span id="q1-time">--.-- | --:--</span></div>
+            <div class="schedule-item">Q2: <span id="q2-time">--.-- | --:--</span></div>
+            <div class="schedule-item">Q3: <span id="q3-time">--.-- | --:--</span></div>
+        </div>
+
+        <div class="card-title" style="margin-left:5px;">📊 Шансы на победу:</div>
+        <div id="chances-container">
+            </div>
+    </div>
+
+    <div id="page-extra" class="page">
+        <div class="section-title">Будущие этапы</div>
+        <div id="upcoming-list"></div>
+        
+        <div class="section-title">Прошедшие этапы</div>
+        <div id="past-list"></div>
+    </div>
+
+    <script>
+        // --- ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ ---
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             
-            // Настройка интервалов сессий
-            const q2Date = new Date(qDate.getTime() + 25 * 60000); // Q2 начинается примерно через 25 мин
-            const q3Date = new Date(qDate.getTime() + 45 * 60000); // Q3 начинается примерно через 45 мин
-
-            const formatTime = (d) => {
-                const dd = formatZero(d.getDate());
-                const mm = formatZero(d.getMonth() + 1);
-                const hh = formatZero(d.getHours());
-                const min = formatZero(d.getMinutes());
-                return `${dd}.${mm} | ${hh}:${min}`;
-            };
-
-            document.getElementById('q1-time').innerText = formatTime(qDate);
-            document.getElementById('q2-time').innerText = formatTime(q2Date);
-            document.getElementById('q3-time').innerText = formatTime(q3Date);
+            document.getElementById('page-' + pageId).classList.add('active');
+            document.getElementById('tab-' + pageId).classList.add('active');
+            window.scrollTo(0, 0);
         }
 
-        // Погода
-        const lat = race.Circuit.Location.lat;
-        const lng = race.Circuit.Location.long;
-        const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`);
-        const weatherData = await weatherRes.json();
-        
-        const temp = Math.round(weatherData.current_weather.temperature);
-        const code = weatherData.current_weather.weathercode;
-        let condition = "Ясно";
-        if (code > 0 && code <= 3) condition = "Облачно";
-        if (code >= 50 && code <= 69) condition = "Дождь";
-        if (code >= 95) condition = "Гроза";
+        const formatZero = (num) => String(num).padStart(2, '0');
 
-        document.getElementById('weather-info').innerText = `${condition} : ${temp}°C`;
-        document.getElementById('track-temp').innerText = `Температура трассы: ${temp + 5}°C`;
+        async function initApp() {
+            try {
+                // 1. ПОЛУЧАЕМ ДАННЫЕ СЛЕДУЮЩЕЙ ГОНКИ
+                const nextRes = await fetch('https://api.jolpi.ca/ergast/f1/current/next.json');
+                const nextData = await nextRes.json();
+                const nextRace = nextData.MRData.RaceTable.Races[0];
 
-        // Гонщики с форматом И. Фамилия
-        const standRes = await fetch('https://api.jolpi.ca/ergast/f1/current/driverStandings.json');
-        const standData = await standRes.json();
-        const topDrivers = standData.MRData.StandingsTable.StandingsLists[0].DriverStandings.slice(0, 3);
-        
-        let chancesHtml = '';
-        let totalTopChances = 0;
-        const baseChances = [45, 25, 15];
+                // Название и дата
+                document.getElementById('main-gp-name').innerText = `GP ${nextRace.Circuit.Location.country}`;
+                const raceDate = new Date(`${nextRace.date}T${nextRace.time || '15:00:00Z'}`);
+                document.getElementById('main-race-date').innerText = `${formatZero(raceDate.getDate())}.${formatZero(raceDate.getMonth() + 1)}`;
 
-        topDrivers.forEach((d, index) => {
-            const chance = baseChances[index];
-            totalTopChances += chance;
-            // Форматирование: Первая буква имени + Фамилия
-            const initial = d.Driver.givenName.charAt(0);
-            const fullName = `${initial}. ${d.Driver.familyName}`;
-            
-            chancesHtml += `<div class="driver-row"><span>${fullName}</span><span class="percent">${chance}%</span></div>`;
-        });
-        
-        chancesHtml += `<div class="driver-row" style="justify-content: center;"><span>Другие (${100 - totalTopChances}%)</span></div>`;
-        document.getElementById('chances-container').innerHTML = chancesHtml;
+                // Таймер обратного отсчета
+                setInterval(() => {
+                    const now = new Date();
+                    const diff = raceDate - now;
+                    if (diff <= 0) {
+                        document.getElementById('countdown').innerText = "00.00.00";
+                        return;
+                    }
+                    const hours = Math.floor(diff / (1000 * 60 * 60));
+                    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const secs = Math.floor((diff % (1000 * 60)) / 1000);
+                    document.getElementById('countdown').innerText = `${formatZero(hours)}.${formatZero(mins)}.${formatZero(secs)}`;
+                }, 1000);
 
-    } catch (e) {
-        console.error("Ошибка загрузки данных:", e);
-    }
-}
-initApp();
-</script>
+                // Квалификация
+                if (nextRace.Qualifying) {
+                    const qStart = new Date(`${nextRace.Qualifying.date}T${nextRace.Qualifying.time}`);
+                    const fmt = (d) => `${formatZero(d.getDate())}.${formatZero(d.getMonth()+1)} | ${formatZero(d.getHours())}:${formatZero(d.getMinutes())}`;
+                    
+                    document.getElementById('q1-time').innerText = fmt(qStart);
+                    document.getElementById('q2-time').innerText = fmt(new Date(qStart.getTime() + 25 * 60000));
+                    document.getElementById('q3-time').innerText = fmt(new Date(qStart.getTime() + 48 * 60000));
+                }
+
+                // 2. ШАНСЫ (ТОП-3 ИЗ ТАБЛИЦЫ)
+                const standRes = await fetch('https://api.jolpi.ca/ergast/f1/current/driverStandings.json');
+                const standData = await standRes.json();
+                const top3 = standData.MRData.StandingsTable.StandingsLists[0].DriverStandings.slice(0, 3);
+                
+                let chHtml = '';
+                const basePercents = [45, 25, 15];
+                top3.forEach((d, i) => {
+                    const shortName = `${d.Driver.givenName.charAt(0)}. ${d.Driver.familyName}`;
+                    chHtml += `
+                        <div class="driver-row">
+                            <span>${shortName}</span>
+                            <span class="percent">${basePercents[i]}%</span>
+                        </div>`;
+                });
+                document.getElementById('chances-container').innerHTML = chHtml + `<div class="driver-row" style="justify-content:center;color:#444">Другие</div>`;
+
+                // 3. КАЛЕНДАРЬ ДЛЯ ВКЛАДКИ EXTRA
+                const calRes = await fetch('https://api.jolpi.ca/ergast/f1/current.json');
+                const calData = await calRes.json();
+                const allRaces = calData.MRData.RaceTable.Races;
+                const today = new Date();
+
+                let upcomingHtml = '';
+                let pastHtml = '';
+
+                allRaces.forEach(r => {
+                    const d = new Date(r.date);
+                    const dStr = `${formatZero(d.getDate())}.${formatZero(d.getMonth()+1)}.${d.getFullYear()}`;
+                    const link = `https://www.formula1.com/en/racing/${r.season}/${r.Circuit.Location.country.replace(' ', '_')}.html`;
+                    
+                    const itemHtml = `
+                        <a href="${link}" target="_blank" class="list-item">
+                            <div class="gp-info-mini">
+                                <span class="gp-name-mini">${r.raceName}</span>
+                                <span class="gp-date-mini">${dStr}</span>
+                            </div>
+                            <div class="gp-status ${d < today ? 'past' : ''}">${d < today ? 'FINISHED' : 'UPCOMING'}</div>
+                        </a>`;
+                    
+                    if (d >= today) upcomingHtml += itemHtml;
+                    else pastHtml = itemHtml + pastHtml; // Новые прошедшие — в начало списка
+                });
+
+                document.getElementById('upcoming-list').innerHTML = upcomingHtml || '<p style="color:#444">Нет данных</p>';
+                document.getElementById('past-list').innerHTML = pastHtml || '<p style="color:#444">Сезон еще не начался</p>';
+
+            } catch (err) {
+                console.error("Ошибка API:", err);
+            }
+        }
+
+        // Запуск
+        initApp();
+    </script>
 </body>
 </html>
