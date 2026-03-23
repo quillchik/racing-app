@@ -39,7 +39,7 @@
             font-weight: 800;
             text-transform: uppercase;
             color: #555;
-            font-size: 14px;
+            font-size: 16px;
             cursor: pointer;
             transition: 0.3s;
         }
@@ -54,7 +54,7 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Шапка ГП */
+        /* Заголовок ГП */
         .gp-title { 
             font-size: 32px; 
             font-weight: 800; 
@@ -64,7 +64,7 @@
             gap: 12px;
         }
 
-        /* Таймер обратного отсчета */
+        /* Таймер */
         .timer-container { position: relative; margin-bottom: 30px; }
         .timer { 
             font-family: 'Share Tech Mono', monospace; 
@@ -72,7 +72,7 @@
             line-height: 1; 
             letter-spacing: -2px; 
         }
-        .baku-time-label { 
+        .baku-time { 
             position: absolute; 
             right: 0; 
             bottom: -20px; 
@@ -88,7 +88,7 @@
 
         .divider { height: 3px; background: var(--f1-red); margin: 30px 0; width: 100%; }
 
-        /* Карточки данных */
+        /* Карточки */
         .card { 
             background: var(--card-bg); 
             border-radius: 16px; 
@@ -98,35 +98,22 @@
         }
         .card-title { font-weight: 800; font-size: 18px; margin: 0 0 15px 0; display: flex; align-items: center; gap: 8px; }
         
-        .schedule-item { font-size: 18px; font-weight: 800; color: var(--text-gray); margin: 10px 0; }
+        .schedule-item { font-size: 20px; font-weight: 800; color: var(--text-gray); margin: 10px 0; }
         .schedule-item span { color: #fff; }
 
         /* Секция Трасса */
         .track-section { margin: 30px 0; }
-        .track-map-container {
-            width: 100%;
-            background: #111;
-            border-radius: 16px;
-            margin: 15px 0;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .track-map { 
-            width: 100%; 
-            height: auto; 
-            filter: drop-shadow(0 0 10px rgba(225, 6, 0, 0.2)); 
-        }
         .track-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
-            gap: 20px; 
+            gap: 25px; 
             margin-top: 20px; 
         }
         .stat-box { display: flex; flex-direction: column; }
         .stat-label { font-size: 11px; color: #666; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
-        .stat-value { font-size: 20px; font-weight: 900; }
+        .stat-value { font-size: 22px; font-weight: 900; }
 
-        /* Шансы и Список Extra */
+        /* Шансы на победу */
         .driver-row { 
             background: var(--card-bg); 
             border-radius: 8px; 
@@ -138,6 +125,7 @@
         }
         .percent { color: #00ff00; }
 
+        /* Список Extra */
         .list-item { 
             background: var(--card-bg); 
             margin-bottom: 10px; 
@@ -166,7 +154,7 @@
         
         <div class="timer-container">
             <div class="timer" id="countdown">00.00.00</div>
-            <div class="baku-time-label">BAKU TIME</div>
+            <div class="baku-time">BAKU TIME</div>
             <div class="date-text" id="main-race-date">--.--</div>
         </div>
 
@@ -187,9 +175,6 @@
 
         <div class="track-section">
             <div class="card-title">📍 Трасса</div>
-            <div class="track-map-container">
-                <img id="track-img" src="" class="track-map" alt="Track Map">
-            </div>
             <div class="track-grid">
                 <div class="stat-box"><span class="stat-label">Длина Трассы</span><span class="stat-value" id="t-len">-- km</span></div>
                 <div class="stat-box"><span class="stat-label">Число Кругов</span><span class="stat-value" id="t-laps">--</span></div>
@@ -203,35 +188,20 @@
     </div>
 
     <div id="page-extra" class="page">
-        <div style="color:var(--f1-red); font-weight:800; margin-bottom:20px; text-transform:uppercase; letter-spacing: 1px;">Все этапы сезона</div>
+        <div style="color:var(--f1-red); font-weight:800; margin-bottom:20px; text-transform:uppercase;">Календарь сезона</div>
         <div id="full-calendar"></div>
     </div>
 
 <script>
-    // База данных по трассам (фото и ТТХ)
+    // База данных трасс
     const circuitData = {
-        "suzuka": { len: "5.807 km", laps: "53", first: "1976", dist: "307.471 km", img: "Japan" },
-        "albert_park": { len: "5.278 km", laps: "58", first: "1996", dist: "306.124 km", img: "Australia" },
-        "baku": { len: "6.003 km", laps: "51", first: "2016", dist: "306.049 km", img: "Azerbaijan" },
-        "bahrain": { len: "5.412 km", laps: "57", first: "2004", dist: "308.238 km", img: "Bahrain" },
-        "jeddah": { len: "6.174 km", laps: "50", first: "2021", dist: "308.450 km", img: "Saudi_Arabia" },
-        "shanghai": { len: "5.451 km", laps: "56", first: "2004", dist: "305.066 km", img: "China" },
-        "miami": { len: "5.412 km", laps: "57", first: "2022", dist: "308.326 km", img: "Miami" },
-        "monaco": { len: "3.337 km", laps: "78", first: "1950", dist: "260.286 km", img: "Monaco" },
-        "catalunya": { len: "4.657 km", laps: "66", first: "1991", dist: "307.236 km", img: "Spain" },
-        "red_bull_ring": { len: "4.318 km", laps: "71", first: "1970", dist: "306.452 km", img: "Austria" },
-        "silverstone": { len: "5.891 km", laps: "52", first: "1950", dist: "306.198 km", img: "Great_Britain" },
-        "hungaroring": { len: "4.381 km", laps: "70", first: "1986", dist: "306.630 km", img: "Hungary" },
-        "spa": { len: "7.004 km", laps: "44", first: "1950", dist: "308.052 km", img: "Belgium" },
-        "zandvoort": { len: "4.259 km", laps: "72", first: "1952", dist: "306.587 km", img: "Netherlands" },
-        "monza": { len: "5.793 km", laps: "53", first: "1950", dist: "306.720 km", img: "Italy" },
-        "marina_bay": { len: "4.940 km", laps: "62", first: "2008", dist: "306.143 km", img: "Singapore" },
-        "americas": { len: "5.513 km", laps: "56", first: "2012", dist: "308.405 km", img: "USA" },
-        "rodriguez": { len: "4.304 km", laps: "71", first: "1963", dist: "305.354 km", img: "Mexico" },
-        "interlagos": { len: "4.309 km", laps: "71", first: "1973", dist: "305.879 km", img: "Brazil" },
-        "vegas": { len: "6.201 km", laps: "50", first: "2023", dist: "309.958 km", img: "Las_Vegas" },
-        "losail": { len: "5.419 km", laps: "57", first: "2021", dist: "308.611 km", img: "Qatar" },
-        "yas_marina": { len: "5.281 km", laps: "58", first: "2009", dist: "306.183 km", img: "Abu_Dhabi" }
+        "suzuka": { len: "5.807 km", laps: "53", first: "1976", dist: "307.471 km" },
+        "albert_park": { len: "5.278 km", laps: "58", first: "1996", dist: "306.124 km" },
+        "baku": { len: "6.003 km", laps: "51", first: "2016", dist: "306.049 km" },
+        "bahrain": { len: "5.412 km", laps: "57", first: "2004", dist: "308.238 km" },
+        "jeddah": { len: "6.174 km", laps: "50", first: "2021", dist: "308.450 km" },
+        "shanghai": { len: "5.451 km", laps: "56", first: "2004", dist: "305.066 km" },
+        "miami": { len: "5.412 km", laps: "57", first: "2022", dist: "308.326 km" }
     };
 
     function switchPage(p) {
@@ -244,12 +214,12 @@
     const formatZero = (n) => String(n).padStart(2, '0');
 
     async function updateRaceUI(race) {
-        // Название и дата
-        document.getElementById('main-gp-name').innerText = `GP ${race.Circuit.Location.country.toUpperCase()}`;
+        // Заголовок и дата
+        document.getElementById('main-gp-name').innerText = `GP ${race.Circuit.Location.country}`;
         const rDate = new Date(`${race.date}T${race.time || '12:00:00Z'}`);
         document.getElementById('main-race-date').innerText = `${formatZero(rDate.getDate())}.${formatZero(rDate.getMonth()+1)}`;
 
-        // Таймер (обнуляем старый при переключении)
+        // Таймер
         if(window.raceInterval) clearInterval(window.raceInterval);
         window.raceInterval = setInterval(() => {
             const diff = rDate - new Date();
@@ -260,80 +230,73 @@
             document.getElementById('countdown').innerText = `${formatZero(h)}.${formatZero(m)}.${formatZero(s)}`;
         }, 1000);
 
-        // Расписание квалификации
+        // Квалификация (расчет сессий)
         const qStart = new Date(`${race.Qualifying?.date || race.date}T${race.Qualifying?.time || '10:00:00Z'}`);
-        const fmtDate = (d) => `${formatZero(d.getDate())}.${formatZero(d.getMonth()+1)} | ${formatZero(d.getHours())}:${formatZero(d.getMinutes())}`;
-        document.getElementById('q1-time').innerText = fmtDate(qStart);
-        document.getElementById('q2-time').innerText = fmtDate(new Date(qStart.getTime() + 25*60000));
-        document.getElementById('q3-time').innerText = fmtDate(new Date(qStart.getTime() + 48*60000));
+        const fmt = (d) => `${formatZero(d.getDate())}.${formatZero(d.getMonth()+1)} | ${formatZero(d.getHours())}:${formatZero(d.getMinutes())}`;
+        document.getElementById('q1-time').innerText = fmt(qStart);
+        document.getElementById('q2-time').innerText = fmt(new Date(qStart.getTime() + 25*60000));
+        document.getElementById('q3-time').innerText = fmt(new Date(qStart.getTime() + 48*60000));
 
-        // Обновление данных трассы
+        // Трасса
         const cid = race.Circuit.circuitId;
-        const info = circuitData[cid] || { len: "5.000 km", laps: "50", first: "----", dist: "305.000 km", img: "Generic" };
+        const info = circuitData[cid] || { len: "5.000 km", laps: "50", first: "----", dist: "305.000 km" };
         document.getElementById('t-len').innerText = info.len;
         document.getElementById('t-laps').innerText = info.laps;
         document.getElementById('t-first').innerText = info.first;
         document.getElementById('t-dist').innerText = info.dist;
-        
-        // Ссылка на фото трассы с серверов F1
-        document.getElementById('track-img').src = `https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/circuit-maps/16x9/${info.img}_Circuit.png`;
 
-        // Погода в реальном времени
+        // Погода
         try {
             const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${race.Circuit.Location.lat}&longitude=${race.Circuit.Location.long}&current_weather=true`);
             const wData = await wRes.json();
             const temp = Math.round(wData.current_weather.temperature);
             document.getElementById('weather-info').innerText = `Ясно : ${temp}°C`;
             document.getElementById('track-temp').innerText = `Температура трассы: ${temp + 7}°C`;
-        } catch(e) { console.error("Weather load failed"); }
+        } catch(e) { console.error("Weather error"); }
 
         switchPage('current');
     }
 
     async function initApp() {
         try {
-            // Загрузка календаря
+            // Календарь
             const calRes = await fetch('https://api.jolpi.ca/ergast/f1/current.json');
             const calData = await calRes.json();
             const races = calData.MRData.RaceTable.Races;
             const today = new Date();
             
-            let calendarHtml = '';
+            let html = '';
             races.forEach(r => {
                 const isPast = new Date(r.date) < today;
-                calendarHtml += `
+                html += `
                     <div class="list-item" onclick='updateRaceUI(${JSON.stringify(r)})'>
                         <div><b>${r.raceName}</b><br><small style="color:#555">${r.date}</small></div>
                         <div class="gp-status ${isPast ? 'past' : ''}">${isPast ? 'FINISHED' : 'UPCOMING'}</div>
                     </div>`;
             });
-            document.getElementById('full-calendar').innerHTML = calendarHtml;
+            document.getElementById('full-calendar').innerHTML = html;
 
-            // Определяем текущее ГП
+            // Загружаем текущую/следующую гонку
             const nextRace = races.find(r => new Date(r.date) >= today) || races[races.length-1];
             updateRaceUI(nextRace);
 
-            // Шансы на победу (Топ-3 зачета)
+            // Шансы (Гонщики)
             const standRes = await fetch('https://api.jolpi.ca/ergast/f1/current/driverStandings.json');
             const standData = await standRes.json();
             const top3 = standData.MRData.StandingsTable.StandingsLists[0].DriverStandings.slice(0, 3);
             
-            let chancesHtml = '';
+            let chHtml = '';
             const percents = [48, 22, 12];
             top3.forEach((d, i) => {
-                let displayName = `${d.Driver.givenName.charAt(0)}. ${d.Driver.familyName}`;
-                // Исправление для Антонелли
-                if(d.Driver.familyName === "Antonelli") displayName = "К. Антонелли";
+                let name = `${d.Driver.givenName.charAt(0)}. ${d.Driver.familyName}`;
+                // Фикс для Антонелли
+                if(d.Driver.familyName === "Antonelli") name = "K. Antonelli";
                 
-                chancesHtml += `
-                    <div class="driver-row">
-                        <span>${displayName}</span>
-                        <span class="percent">${percents[i]}%</span>
-                    </div>`;
+                chHtml += `<div class="driver-row"><span>${name}</span><span class="percent">${percents[i]}%</span></div>`;
             });
-            document.getElementById('chances-container').innerHTML = chancesHtml + `<div class="driver-row" style="justify-content:center;color:#444;font-size:12px">Остальные: 18%</div>`;
+            document.getElementById('chances-container').innerHTML = chHtml + `<div class="driver-row" style="justify-content:center;color:#444">Другие</div>`;
 
-        } catch(e) { console.error("Init failed", e); }
+        } catch(e) { console.error("App init error", e); }
     }
 
     initApp();
