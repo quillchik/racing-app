@@ -2,67 +2,132 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1 Japan GP 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Racing Hub v2</title>
     <style>
-        body { background: #0b0b0b; color: white; font-family: -apple-system, sans-serif; padding: 20px; margin: 0; }
-        .header { border-bottom: 3px solid #e10600; margin-bottom: 20px; padding-bottom: 10px; }
-        .event-card { background: #1a1a1a; border-radius: 12px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #e10600; }
-        .weather { background: #252525; padding: 10px; border-radius: 8px; color: #00d2ff; font-weight: bold; }
-        .chance-list { list-style: none; padding: 0; }
-        .chance-item { background: #222; margin: 5px 0; padding: 10px; border-radius: 5px; display: flex; justify-content: space-between; }
-        .win-chance { color: #00ff00; font-weight: bold; }
-        .btn { background: #e10600; color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px; }
+        /* БАЗОВЫЕ СТИЛИ - ТВОЁ ПОЛЕ ДЛЯ ДИЗАЙНА */
+        body { 
+            background: #0b0b0b; 
+            color: white; 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* ШАПКА И ТАБЫ */
+        .tab-menu { 
+            display: flex; 
+            background: #161616; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+
+        .tab-btn { 
+            flex: 1; 
+            padding: 18px 5px; 
+            border: none; 
+            background: none; 
+            color: #666; 
+            font-weight: bold; 
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        /* Стиль активной кнопки */
+        .tab-btn.active { 
+            color: #e10600; 
+            box-shadow: inset 0 -3px 0 #e10600; 
+        }
+
+        /* КОНТЕНТ */
+        .content-container { padding: 20px; }
+
+        .tab-panel { 
+            display: none; /* Прячем все панели */
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-panel.active { 
+            display: block; /* Показываем активную */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ЗАГЛУШКИ ДЛЯ КАРТОЧЕК */
+        .card { 
+            background: #1a1a1a; 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 15px; 
+            border: 1px solid #222;
+        }
+        h1 { font-size: 24px; margin-bottom: 20px; color: #eee; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>GP JAPAN 🇯🇵 2026</h1>
-        <p>Suzuka International Circuit</p>
-    </div>
+    <nav class="tab-menu">
+        <button class="tab-btn active" data-target="f1">Formula 1</button>
+        <button class="tab-btn" data-target="wec">WEC</button>
+        <button class="tab-btn" data-target="gt">GT / Nurb</button>
+    </nav>
 
-    <div class="event-card">
-        <h3>📅 Расписание (Baku Time):</h3>
-        <p>🏎️ <strong>Квалификация:</strong> 4 апреля | 10:00</p>
-        <p>🏁 <strong>Гонка:</strong> 5 апреля | 09:00</p>
-    </div>
+    <div class="content-container">
+        <section id="f1" class="tab-panel active">
+            <h1>F1 News</h1>
+            <div class="card" style="border-left: 4px solid #e10600;">
+                <h3>GP Japan 🇯🇵</h3>
+                <p>Следующая остановка: Сузука</p>
+            </div>
+        </section>
 
-    <div class="event-card">
-        <h3>☁️ Прогноз погоды:</h3>
-        <div class="weather">Вероятность дождя: 65% (Возможен хаос)</div>
-        <p style="font-size: 0.9rem; color: #aaa; margin-top: 5px;">Температура трассы: ~18°C</p>
-    </div>
+        <section id="wec" class="tab-panel">
+            <h1>WEC Endurance</h1>
+            <div class="card" style="border-left: 4px solid #00ff00;">
+                <h3>24h Le Mans</h3>
+                <p>Главная гонка года скоро.</p>
+            </div>
+        </section>
 
-    <h3>📊 Шансы на победу:</h3>
-    <ul class="chance-list">
-        <li class="chance-item"><span>M. Verstappen</span> <span class="win-chance">45%</span></li>
-        <li class="chance-item"><span>L. Norris</span> <span class="win-chance">25%</span></li>
-        <li class="chance-item"><span>C. Leclerc</span> <span class="win-chance">15%</span></li>
-        <li class="chance-item"><span>Другие</span> <span class="win-chance">15%</span></li>
-    </ul>
-
-    <hr style="border: 0.5px solid #333; margin: 20px 0;">
-    
-    <div id="api-data">
-        <button class="btn" onclick="fetchLastResults()">УЗНАТЬ ИТОГИ ПРОШЛОЙ ГОНКИ</button>
+        <section id="gt" class="tab-panel">
+            <h1>GT World</h1>
+            <div class="card" style="border-left: 4px solid #ffaa00;">
+                <h3>Nürburgring 24h</h3>
+                <p>Зеленый ад готовится к заезду.</p>
+            </div>
+        </section>
     </div>
 
     <script>
-        async function fetchLastResults() {
-            const container = document.getElementById('api-data');
-            container.innerHTML = "Загрузка данных...";
-            try {
-                const res = await fetch('https://ergast.com/api/f1/current/last/results.json');
-                const data = await res.json();
-                const race = data.MRData.RaceTable.Races[0];
-                let html = `<h4>Победители ${race.raceName}:</h4>`;
-                race.Results.slice(0, 3).forEach(r => {
-                    html += `<div style="margin-bottom:5px;">${r.position}. ${r.Driver.familyName} (${r.Constructor.name})</div>`;
-                });
-                container.innerHTML = html;
-            } catch (e) { container.innerHTML = "Ошибка сети"; }
-        }
+        // НОВАЯ ЛОГИКА КНОПОК
+        const buttons = document.querySelectorAll('.tab-btn');
+        const panels = document.querySelectorAll('.tab-panel');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const target = button.getAttribute('data-target');
+
+                // 1. Убираем активный класс у всех кнопок
+                buttons.forEach(btn => btn.classList.remove('active'));
+                // 2. Прячем все панели
+                panels.forEach(panel => panel.classList.remove('active'));
+
+                // 3. Активируем нужную кнопку и панель
+                button.classList.add('active');
+                document.getElementById(target).classList.add('active');
+                
+                // Легкая вибрация при нажатии (только на Android/некоторых iPhone)
+                if (window.navigator.vibrate) window.navigator.vibrate(10);
+            });
+        });
     </script>
 </body>
 </html>
