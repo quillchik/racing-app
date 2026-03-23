@@ -188,7 +188,7 @@
     </div>
 
 <script>
-    // База флагов для календаря
+    // Объект с флагами стран
     const countryFlags = {
         "Bahrain": "🇧🇭",
         "Saudi Arabia": "🇸🇦",
@@ -251,6 +251,16 @@
 
     const formatZero = (n) => String(n).padStart(2, '0');
 
+    // Функция форматирования имен
+    const formatDriverName = (driver) => {
+        let initial = driver.givenName.charAt(0);
+        // Замена A. Antonelli на K. Antonelli
+        if (driver.familyName === "Antonelli") {
+            initial = "K";
+        }
+        return `${initial}. ${driver.familyName}`;
+    };
+
     async function updateRaceUI(race) {
         const countryName = race.Circuit.Location.country;
         const flag = countryFlags[countryName] || "";
@@ -299,7 +309,7 @@
         const chancesContainer = document.getElementById('chances-container');
         const chancesTitle = document.getElementById('chances-title');
         
-        if (isPast) {
+        if (new Date(race.date) < new Date()) {
             chancesTitle.innerText = "🏆 Результаты гонки:";
             try {
                 const resRes = await fetch(`https://api.jolpi.ca/ergast/f1/${race.season}/${race.round}/results.json`);
@@ -308,7 +318,7 @@
                 
                 let resHtml = '';
                 results.forEach((r, i) => {
-                    let name = `${r.Driver.givenName.charAt(0)}. ${r.Driver.familyName}`;
+                    let name = formatDriverName(r.Driver);
                     resHtml += `<div class="driver-row"><span>${name}</span><span class="p${i+1}">P${r.position}</span></div>`;
                 });
                 chancesContainer.innerHTML = resHtml;
@@ -325,7 +335,7 @@
                 let chHtml = '';
                 const percents = [48, 22, 12];
                 top3.forEach((d, i) => {
-                    let name = `${d.Driver.givenName.charAt(0)}. ${d.Driver.familyName}`;
+                    let name = formatDriverName(d.Driver);
                     chHtml += `<div class="driver-row"><span>${name}</span><span class="percent">${percents[i]}%</span></div>`;
                 });
                 chancesContainer.innerHTML = chHtml + `<div class="driver-row" style="justify-content:center;color:#444">Другие</div>`;
@@ -347,12 +357,9 @@
             let html = '';
             races.forEach(r => {
                 const isPast = new Date(r.date) < today;
+                const flag = countryFlags[r.Circuit.Location.country] || "";
                 const encodedRace = encodeURIComponent(JSON.stringify(r));
                 
-                // Подбор флага
-                const country = r.Circuit.Location.country;
-                const flag = countryFlags[country] || "";
-
                 html += `
                     <div class="list-item" onclick='updateRaceUI(JSON.parse(decodeURIComponent("${encodedRace}")))'>
                         <div><b>${r.raceName} ${flag}</b><br><small style="color:#555">${r.date}</small></div>
