@@ -2,101 +2,66 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Racing Hub Interactive</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Japan GP 2026</title>
     <style>
-        body { background: #0b0b0b; color: white; font-family: -apple-system, sans-serif; margin: 0; padding: 0; }
-        
-        /* Меню вкладок */
-        .nav-tabs { display: flex; background: #161616; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #333; }
-        .tab-link { flex: 1; padding: 15px; border: none; background: none; color: #666; font-weight: bold; font-size: 13px; }
-        .tab-link.active { color: #e10600; box-shadow: inset 0 -3px 0 #e10600; }
-
-        .content { padding: 20px; }
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
-
-        /* Стиль КАРТОЧКИ-НОВОСТИ */
-        .news-card { 
-            background: #1a1a1a; 
-            padding: 20px; 
-            border-radius: 12px; 
-            margin-bottom: 15px; 
-            border-left: 4px solid #e10600;
-            cursor: pointer; /* Чтобы было видно, что можно нажать */
-            transition: transform 0.1s;
-        }
-        .news-card:active { transform: scale(0.98); background: #222; } /* Эффект нажатия на айфоне */
-
-        /* Стиль СТРАНИЦЫ НОВОСТИ */
-        .full-news { display: none; padding: 20px; animation: slideIn 0.3s; }
-        .back-btn { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 8px; margin-bottom: 20px; }
-
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        body { background: #0b0b0b; color: white; font-family: -apple-system, sans-serif; padding: 20px; margin: 0; }
+        .header { border-bottom: 3px solid #e10600; margin-bottom: 20px; padding-bottom: 10px; }
+        .event-card { background: #1a1a1a; border-radius: 12px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #e10600; }
+        .weather { background: #252525; padding: 10px; border-radius: 8px; color: #00d2ff; font-weight: bold; }
+        .chance-list { list-style: none; padding: 0; }
+        .chance-item { background: #222; margin: 5px 0; padding: 10px; border-radius: 5px; display: flex; justify-content: space-between; }
+        .win-chance { color: #00ff00; font-weight: bold; }
+        .btn { background: #e10600; color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="main-screen">
-        <nav class="nav-tabs">
-            <button class="tab-link active" onclick="showTab('f1', this)">F1</button>
-            <button class="tab-link" onclick="showTab('wec', this)">WEC</button>
-            <button class="tab-link" onclick="showTab('gt', this)">GT</button>
-        </nav>
-
-        <div class="content">
-            <div id="f1" class="tab-panel active">
-                <h1>F1 News</h1>
-                
-                <div class="news-card" onclick="openNews('news-japan')">
-                    <h3>🇯🇵 ГП Японии: Что ждать от Сузуки?</h3>
-                    <p style="color: #888;">Нажми, чтобы прочитать подробности...</p>
-                </div>
-
-                <div class="news-card">
-                    <h3>🏆 Итоги тестов</h3>
-                    <p style="color: #888;">Скоро здесь будут данные.</p>
-                </div>
-            </div>
-
-            <div id="wec" class="tab-panel"><h1>WEC Content</h1></div>
-            <div id="gt" class="tab-panel"><h1>GT Content</h1></div>
-        </div>
+    <div class="header">
+        <h1>GP JAPAN 🇯🇵 2026</h1>
+        <p>Suzuka International Circuit</p>
     </div>
 
-    <div id="news-japan" class="full-news">
-        <button class="back-btn" onclick="closeNews()">← Назад</button>
-        <h1 style="color: #e10600;">ГП Японии 2026</h1>
-        <img src="https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?auto=format&fit=crop&w=800&q=80" style="width:100%; border-radius:10px; margin-bottom:15px;" alt="Suzuka">
-        <p>Сузука — одна из самых сложных и любимых трасс пилотов. В этом году ожидается переменчивая погода.</p>
-        <p><strong>Ключевые моменты:</strong></p>
-        <ul>
-            <li>Борьба Red Bull и McLaren в скоростных поворотах.</li>
-            <li>Тактика использования резины при низкой температуре.</li>
-            <li>Риск дождя во время квалификации.</li>
-        </ul>
+    <div class="event-card">
+        <h3>📅 Расписание (Baku Time):</h3>
+        <p>🏎️ <strong>Квалификация:</strong> 4 апреля | 10:00</p>
+        <p>🏁 <strong>Гонка:</strong> 5 апреля | 09:00</p>
+    </div>
+
+    <div class="event-card">
+        <h3>☁️ Прогноз погоды:</h3>
+        <div class="weather">Вероятность дождя: 65% (Возможен хаос)</div>
+        <p style="font-size: 0.9rem; color: #aaa; margin-top: 5px;">Температура трассы: ~18°C</p>
+    </div>
+
+    <h3>📊 Шансы на победу:</h3>
+    <ul class="chance-list">
+        <li class="chance-item"><span>M. Verstappen</span> <span class="win-chance">45%</span></li>
+        <li class="chance-item"><span>L. Norris</span> <span class="win-chance">25%</span></li>
+        <li class="chance-item"><span>C. Leclerc</span> <span class="win-chance">15%</span></li>
+        <li class="chance-item"><span>Другие</span> <span class="win-chance">15%</span></li>
+    </ul>
+
+    <hr style="border: 0.5px solid #333; margin: 20px 0;">
+    
+    <div id="api-data">
+        <button class="btn" onclick="fetchLastResults()">УЗНАТЬ ИТОГИ ПРОШЛОЙ ГОНКИ</button>
     </div>
 
     <script>
-        // Переключение вкладок
-        function showTab(id, btn) {
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.tab-link').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        // ОТКРЫТЬ НОВОСТЬ
-        function openNews(newsId) {
-            document.getElementById('main-screen').style.display = 'none'; // Прячем главное меню
-            document.getElementById(newsId).style.display = 'block'; // Показываем новость
-            window.scrollTo(0, 0); // Прокручиваем в начало
-        }
-
-        // ЗАКРЫТЬ НОВОСТЬ
-        function closeNews() {
-            document.querySelectorAll('.full-news').forEach(n => n.style.display = 'none'); // Прячем все новости
-            document.getElementById('main-screen').style.display = 'block'; // Показываем главное меню
+        async function fetchLastResults() {
+            const container = document.getElementById('api-data');
+            container.innerHTML = "Загрузка данных...";
+            try {
+                const res = await fetch('https://ergast.com/api/f1/current/last/results.json');
+                const data = await res.json();
+                const race = data.MRData.RaceTable.Races[0];
+                let html = `<h4>Победители ${race.raceName}:</h4>`;
+                race.Results.slice(0, 3).forEach(r => {
+                    html += `<div style="margin-bottom:5px;">${r.position}. ${r.Driver.familyName} (${r.Constructor.name})</div>`;
+                });
+                container.innerHTML = html;
+            } catch (e) { container.innerHTML = "Ошибка сети"; }
         }
     </script>
 </body>
